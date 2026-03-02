@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Smart Heart Monitoring Program</title>
+  <style>
+    :root {
+      --medical-blue: #1f6feb;
+      --soft-blue: #e8f1ff;
+      --alert-red: #c62828;
+      --ok-green: #2e7d32;
+      --text-dark: #17324d;
+      --card-bg: #ffffff;
+      --border: #c7d8ee;
+    }
+
+    * {
+      box-sizing: border-box;
+      font-family: Arial, Helvetica, sans-serif;
+    }
+
+    body {
+      margin: 0;
+      background: linear-gradient(180deg, #f5faff 0%, #edf5ff 100%);
+      color: var(--text-dark);
+      min-height: 100vh;
+    }
+
+    header {
+      background: var(--medical-blue);
+      color: #fff;
+      padding: 1rem 1.25rem;
+      text-align: center;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.12);
+    }
+
+    header h1 {
+      margin: 0;
+      font-size: 1.45rem;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 0.4rem;
+    }
+
+    .container {
+      max-width: 1100px;
+      margin: 1rem auto 2rem;
+      padding: 0 1rem;
+      display: grid;
+      grid-template-columns: repeat(2, minmax(280px, 1fr));
+      gap: 1rem;
+    }
+
+    .panel {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 1rem;
+      box-shadow: 0 3px 10px rgba(15, 47, 82, 0.08);
+    }
+
+    .panel h2 {
+      margin: 0 0 0.75rem;
+      color: var(--medical-blue);
+      font-size: 1.2rem;
+      border-bottom: 2px solid var(--soft-blue);
+      padding-bottom: 0.45rem;
+    }
+
+    .field {
+      display: flex;
+      flex-direction: column;
+      margin-bottom: 0.75rem;
+    }
+
+    .field label {
+      margin-bottom: 0.3rem;
+      font-weight: bold;
+      font-size: 0.95rem;
+    }
+
+    .field input,
+    .field select {
+      border: 1px solid #b9cde6;
+      border-radius: 8px;
+      padding: 0.5rem 0.55rem;
+      font-size: 0.95rem;
+      background: #fdfefe;
+    }
+
+    button {
+      border: none;
+      border-radius: 8px;
+      background: var(--medical-blue);
+      color: #fff;
+      padding: 0.6rem 0.95rem;
+      font-size: 1rem;
+      font-weight: bold;
+      cursor: pointer;
+      transition: transform 120ms ease, background 120ms ease;
+    }
+
+    button:hover {
+      background: #1656b7;
+      transform: translateY(-1px);
+    }
+
+    .dashboard-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.6rem;
+      margin: 0.5rem 0 0.85rem;
+    }
+
+    .metric {
+      background: #f8fbff;
+      border: 1px solid #dbe8f9;
+      border-radius: 8px;
+      padding: 0.65rem;
+    }
+
+    .metric .label {
+      font-size: 0.8rem;
+      color: #54708f;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+
+    .metric .value {
+      margin-top: 0.3rem;
+      font-size: 1.1rem;
+      font-weight: bold;
+    }
+
+    .alert-box {
+      border-left: 5px solid var(--alert-red);
+      background: #fff0f0;
+      color: #8a1f1f;
+      border-radius: 8px;
+      padding: 0.6rem;
+      margin-bottom: 0.5rem;
+      display: none;
+    }
+
+    .suggestion-box {
+      border-left: 5px solid var(--ok-green);
+      background: #edf9ee;
+      color: #215d28;
+      border-radius: 8px;
+      padding: 0.6rem;
+      margin-bottom: 0.5rem;
+      display: none;
+    }
+
+    /* A simple visual heart-rate indicator bar */
+    .indicator-wrap {
+      margin-top: 0.6rem;
+      background: #eef4fd;
+      border-radius: 999px;
+      height: 14px;
+      overflow: hidden;
+      border: 1px solid #d0dff2;
+    }
+
+    .indicator-fill {
+      height: 100%;
+      width: 0%;
+      background: linear-gradient(90deg, #1f6feb 0%, #39b7ff 50%, #df3b3b 100%);
+      transition: width 250ms ease;
+    }
+
+    .helper {
+      font-size: 0.83rem;
+      color: #5d7591;
+      margin: 0.4rem 0 0;
+    }
+
+    @media (max-width: 840px) {
+      .container {
+        grid-template-columns: 1fr;
+      }
+
+      .dashboard-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>❤️ Smart Heart Monitoring Program</h1>
+  </header>
+
+  <main class="container">
+    <!-- Patient Device Screen: simulates wearable data entry -->
+    <section class="panel">
+      <h2>Patient Device Screen</h2>
+
+      <div class="field">
+        <label for="patientName">Patient Name</label>
+        <input id="patientName" type="text" placeholder="Enter patient name" value="Alex Rivera" />
+      </div>
+
+      <div class="field">
+        <label for="heartRate">Heart Rate (BPM)</label>
+        <input id="heartRate" type="number" min="30" max="220" value="78" />
+      </div>
+
+      <div class="field">
+        <label for="activityLevel">Activity Level</label>
+        <select id="activityLevel">
+          <option value="low">Low</option>
+          <option value="medium" selected>Medium</option>
+          <option value="high">High</option>
+        </select>
+      </div>
+
+      <div class="field">
+        <label for="smokingToday">Smoking Today?</label>
+        <select id="smokingToday">
+          <option value="no" selected>No</option>
+          <option value="yes">Yes</option>
+        </select>
+      </div>
+
+      <button id="sendDataBtn">Send Data</button>
+      <p class="helper">This simulates wearable data being transmitted to a doctor dashboard.</p>
+    </section>
+
+    <!-- Doctor Monitoring Dashboard: receives and interprets patient data -->
+    <section class="panel">
+      <h2>Doctor Monitoring Dashboard</h2>
+
+      <div class="dashboard-grid">
+        <div class="metric"><div class="label">Patient</div><div id="dPatient" class="value">—</div></div>
+        <div class="metric"><div class="label">Heart Rate</div><div id="dHeartRate" class="value">—</div></div>
+        <div class="metric"><div class="label">Activity</div><div id="dActivity" class="value">—</div></div>
+        <div class="metric"><div class="label">Smoking</div><div id="dSmoking" class="value">—</div></div>
+      </div>
+
+      <div id="highHrAlert" class="alert-box">⚠️ High heart rate detected.</div>
+      <div id="activitySuggestion" class="suggestion-box">💡 Suggestion: Increase physical activity to support heart health.</div>
+      <div id="smokingWarning" class="alert-box">⚠️ Smoking increases cardiovascular disease risk. Encourage cessation support.</div>
+
+      <div class="indicator-wrap" title="Heart-rate intensity indicator">
+        <div id="hrIndicator" class="indicator-fill"></div>
+      </div>
+      <p class="helper">Indicator scales from 30–180 BPM for a quick visual status.</p>
+    </section>
+  </main>
+
+  <script>
+    // Access UI elements once for easy reuse.
+    const patientNameInput = document.getElementById('patientName');
+    const heartRateInput = document.getElementById('heartRate');
+    const activityInput = document.getElementById('activityLevel');
+    const smokingInput = document.getElementById('smokingToday');
+    const sendDataBtn = document.getElementById('sendDataBtn');
+
+    const dPatient = document.getElementById('dPatient');
+    const dHeartRate = document.getElementById('dHeartRate');
+    const dActivity = document.getElementById('dActivity');
+    const dSmoking = document.getElementById('dSmoking');
+
+    const highHrAlert = document.getElementById('highHrAlert');
+    const activitySuggestion = document.getElementById('activitySuggestion');
+    const smokingWarning = document.getElementById('smokingWarning');
+    const hrIndicator = document.getElementById('hrIndicator');
+
+    // Convert BPM value into a 0-100% indicator width.
+    function bpmToPercent(bpm) {
+      const minBpm = 30;
+      const maxBpm = 180;
+      const clamped = Math.max(minBpm, Math.min(maxBpm, bpm));
+      return ((clamped - minBpm) / (maxBpm - minBpm)) * 100;
+    }
+
+    // Simulate sending wearable data to the doctor's dashboard.
+    sendDataBtn.addEventListener('click', () => {
+      const patientName = patientNameInput.value.trim() || 'Unknown Patient';
+      const heartRate = Number(heartRateInput.value);
+      const activityLevel = activityInput.value;
+      const smokingToday = smokingInput.value;
+
+      // Update dashboard data fields.
+      dPatient.textContent = patientName;
+      dHeartRate.textContent = Number.isFinite(heartRate) ? `${heartRate} BPM` : 'Invalid value';
+      dActivity.textContent = activityLevel.charAt(0).toUpperCase() + activityLevel.slice(1);
+      dSmoking.textContent = smokingToday === 'yes' ? 'Yes' : 'No';
+
+      // Alert logic required by the prototype goals.
+      highHrAlert.style.display = heartRate > 100 ? 'block' : 'none';
+      activitySuggestion.style.display = activityLevel === 'low' ? 'block' : 'none';
+      smokingWarning.style.display = smokingToday === 'yes' ? 'block' : 'none';
+
+      // Update simple graph/indicator for heart-rate intensity.
+      const widthPercent = Number.isFinite(heartRate) ? bpmToPercent(heartRate) : 0;
+      hrIndicator.style.width = `${widthPercent}%`;
+    });
+  </script>
+</body>
+</html>
